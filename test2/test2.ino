@@ -51,6 +51,7 @@ void loop() {
     
     Serial.println("Motion Detected");
     Serial.println("Temprature detection started");
+    delay(3000);
     for(i=0; i<5; i++){
       k=temprature();      
       }
