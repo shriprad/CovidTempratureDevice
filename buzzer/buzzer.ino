@@ -1,5 +1,5 @@
 
-static const int buzzerPin = 12;    // set the variable "buzzerPin" to pin 12
+static const int buzzerPin = 6;    // set the variable "buzzerPin" to pin 12
 void setup(void) {
   pinMode(buzzerPin, OUTPUT);       // set the buzzerPin as output
 }

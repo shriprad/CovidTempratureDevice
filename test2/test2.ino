@@ -8,21 +8,20 @@ GridEYE grideye;
 
 #define TEST_DELAY 2000
 
-#define CLK 2
+#define CLK 4
 #define DIO 3
 
 TM1637Display display(CLK,DIO);
 
 
-int ledDanger = 13;// the pin that the LED is atteched to
-int ledSafe = 11;
+int ledDanger = 12;// the pin that the LED is atteched to
+int ledSafe = 13;
 int sensor = 2;              // the pin that the sensor is atteched to
 int state = LOW;             // by default, no motion detected
 int val = 0;
 int i=0;
 float k=0;
-static const int buzzerPin = 12;
-int buzz=1;
+static const int buzzerPin = 6;
 
 void setup() {
   Wire.begin();
@@ -30,7 +29,8 @@ void setup() {
   
   
   pinMode(buzzerPin, OUTPUT);
-  pinMode(led, OUTPUT);      // initalize LED as an output
+  pinMode(ledDanger, OUTPUT);
+  pinMode(ledSafe, OUTPUT);// initalize LED as an output
   pinMode(sensor, INPUT);    // initialize sensor as an input
   Serial.begin(115200); 
   
@@ -39,6 +39,11 @@ void setup() {
 }
 
 void loop() {
+  display.setBrightness(0x0f);
+  uint8_t data[] = { 0x0, 0x0, 0x0, 0x0 };
+  display.setSegments(data);
+  display.showNumberDec(0000, false, 4, 2);
+  delay(TEST_DELAY);
   val = digitalRead(sensor);
   if(val==HIGH){
     
@@ -47,9 +52,12 @@ void loop() {
     Serial.println("Motion Detected");
     Serial.println("Temprature detection started");
     for(i=0; i<5; i++){
-      k=temprature();
+      k=temprature();      
+      }
+      k=k+5;
 
       while(k>=40){
+        Serial.println("Danger");
         digitalWrite(ledDanger, HIGH);        
         beep();
         delay(400);
@@ -57,8 +65,8 @@ void loop() {
         
         
         }
-      
-      }
+
+       k=k*100;
 
      Serial.println(k);
      digitalWrite(ledSafe, HIGH);
